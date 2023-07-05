@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous" />
+    
+    <link href="https://file.myfontastic.com/P5yHUXPUMUDWPeYAS6dfP/icons.css" rel="stylesheet">
+   
+
+   
+    <link rel="stylesheet" href="/estilos.css" />
+  </head>
+
+  <body class="fondo1" >
+    
+      
+      <div style="text-align: center;">
+      
+      <!----------------------- Cartel promociones% --------------------------->
+         
+<p class="text-center text_margin">Esta es una sección donde los comercios que integran "Info Arias" 
+                                   pueden hacer OFERTAS, PROMOCIONES, DESCUENTOS, PRESENTACIONES y 
+                                   donte tampbien te enteraras de algunos EVENTOS de la zona.</p>
+     
+      <div class="text-center">
+       <img class="blink-1" src="https://cdn.glitch.global/aa1c1660-0806-4283-9471-ec93338476c6/cartel_parpadiante.png?v=1673258439315" 
+               alt="Cartel promociones%" style="width:100%;">
+      </div>
+          
+           
+            
+       <!-- Lugar por donde ingresan las publicaciones -->
+      <div id="publicacioneSPRO"></div>
+
+      <!------------------------------------------------------->
+
+
+
+
+
+
+
+
+
+
+       <!-- Lugar por donde ingresan las publicaciones -->
+       <div id="publicacioneSFREE"></div>
+    
+      <!------------------------------------------------------->
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <!------------------------------- suplemento-abajo -------------------------------------->           
+                <div> 
+                    <img src="https://cdn.glitch.global/0268f5a4-565f-4df9-afc4-5ef9a02dd902/suplemento_abajo.png?v=1674707367334"
+                    alt="" style="width:100%"/>
+                </div>
+
+
+       </div>
+
+ <div style="width:100%" class="pie_contacto">
+          
+            <div class="bt_devajo_contactos">
+
+              
+
+                
+                   <a href="https://infoariasweb.web.app/j_publica1.html"><img class="bth_2 btn_precionar2" 
+                           src="https://cdn.glitch.global/d2790308-1a85-4496-93a7-f609261ec0d4/a_publica_free.png?v=1687928712639"></a>
+
+                  <a href="https://infoariasweb.web.app/j_publica1_pro.html">
+                    <img class="bth_1 btn_precionar2"
+                         src="https://cdn.glitch.global/d2790308-1a85-4496-93a7-f609261ec0d4/a_publica_pro.png?v=1687928712060"></a>
+                    
+
+                   
+
+            </div>
+          </div>
+
+
+
+
+
+
+  <!-- Agrega el SDK de Firebase -->
+  <script type="module" src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+  <!-- Agrega los servicios que necesitas (en este caso, Cloud Firestore) -->
+  <script type="module" src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <script type="module" src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
+   <script>
+   function share(imagenPublic, nombrePro) {
+  var title = "InfoArias Imagen del Muro";
+  var message = "Esta es una Imagen que publicó " + nombrePro + " en el Muro de InfoArias: " + imagenPublic;
+  Android.shareLink(title, message);
+}
+   </script>
+
+   
+
+  <!-- Configura Firebase -->
+  <script type="module">
+
+   var firebaseConfig = {
+              apiKey: "AIzaSyBlXEy8jj8s09bp1JsxprzdpRaWT-hPs60",
+              authDomain: "infoariasweb.firebaseapp.com",
+              projectId: "infoariasweb",
+              storageBucket: "infoariasweb.appspot.com",
+              messagingSenderId: "621642706500",
+              appId: "1:621642706500:web:eb71f8f1be6cb05a68d611",              
+            };
+
+    firebase.initializeApp(firebaseConfig);
+
+    // Obtiene una referencia a la colección "planillas" en Firestore
+    var planillasRef = firebase.firestore().collection('publicPRO');
+
+    
+
+    // Realizar consulta y ordenar documentos por fecha de creación en orden descendente
+    planillasRef.orderBy('Fecha', 'desc').get().then(querySnapshot => {
+      var index = 0; // Dentro del forEach
+    querySnapshot.forEach(doc => {      
+        var nombrePro = doc.data().Nombre;
+        var imagenPublic = doc.data().ImagenPublic;
+        console.log("La Imagen:", imagenPublic)        
+        // Crea un elemento para mostrar los datos de cada planilla
+        var planillaDiv = document.createElement('div');
+       // var uniqueId = doc.id + "planillas-" + index; // Genera un ID único para cada elemento           
+        var uniqueId = 'planillas-' + index; // Generar el ID único con un prefijo y un número incremental
+        
+        
+        planillaDiv.innerHTML = `
+        <div class="PublicPro">
+         <div class="encabesadoPRO">
+            <div class="imagenNombrePro">
+            <img class=" imagenPerfilPro glow" style="width: 17%;" id="" src="${doc.data().ImagenPerfil}" alt="Imagen">           
+            <p class="nombrePro" style="color:crimson"> ${doc.data().Nombre}</p>
+            </div>
+        </div>  
+          <p style="font-size: 13px;"><strong style="color:crimson"></strong> ${doc.data().Descripción}</p>
+          <img style="width:100%;" id="" src="${doc.data().ImagenPublic}" alt="Imagen">  
+    </div>
+</div>
+      <div class="pocision_background">
+        <div id="${uniqueId}" Class="bt_devajo">
+            <a onclick="share(\`${imagenPublic}\`, \`${nombrePro}\`)" data-whatsapp="${doc.data().WhatsApp}"><img Class="bt_1 btn_precionar2" 
+              src="https://cdn.glitch.global/d2790308-1a85-4496-93a7-f609261ec0d4/Compartir.png?v=1688088818571"></a>  
+               <a href="${doc.data().Localizacion}"  data-localizacion="${doc.data().Localizacion}" ><img Class="bt_1 btn_precionar2"
+              src="https://cdn.glitch.global/d2790308-1a85-4496-93a7-f609261ec0d4/Google_maps.png?v=1666742791863"></a>
+              <a href="${doc.data().Web}" data-web="${doc.data().Web}"><img Class="bt_1 btn_precionar2 shake-br"
+                src="https://cdn.glitch.global/d2790308-1a85-4496-93a7-f609261ec0d4/web.png?v=1688285295308"></a>
+               <a href="${doc.data().Tienda}" data-tienda="${doc.data().Tienda}"><img Class="bt_1 btn_precionar2 shake-br"
+                src="https://cdn.glitch.global/0268f5a4-565f-4df9-afc4-5ef9a02dd902/TiendaOnLine.png?v=1688063197425"></a> 
+                <a href="mailto:${doc.data().Email}" data-email="${doc.data().Email}"><img Class="bt_1 btn_precionar2"
+                  src="https://cdn.glitch.global/d2790308-1a85-4496-93a7-f609261ec0d4/correo.png?v=1666828996798"></a>
+                 <a href="https://www.instagram.com/${doc.data().Instagram}/" data-instagram="${doc.data().Instagram}"> 
+                  <img Class="bt_1 btn_precionar2" 
+                  src="https://cdn.glitch.global/d2790308-1a85-4496-93a7-f609261ec0d4/Instagram.png?v=1666742791757"></a>
+                 <a href="${doc.data().Facebook}" data-facebook="${doc.data().Facebook}"><img Class="bt_1 btn_precionar2"
+                    src="https://cdn.glitch.global/d2790308-1a85-4496-93a7-f609261ec0d4/Facebook.png?v=1666742791803"></a>
+                  <a href="tel:${doc.data().Telefono}" data-telefono="${doc.data().Telefono}"> <img Class="bt_1 btn_precionar2"
+                      src="https://cdn.glitch.global/d2790308-1a85-4496-93a7-f609261ec0d4/llamada.png?v=1666714961585"></a>
+                    <a href="https://wa.me/${doc.data().WhatsApp}?text= Hola te hablo desde InfoArias" data-whatsapp="${doc.data().WhatsApp}">
+                      <img Class="bt_1 btn_precionar2"
+                        src="https://cdn.glitch.global/d2790308-1a85-4496-93a7-f609261ec0d4/whatsapp.png?v=1666714961585"></a>                        
+
+        </div></div></div><hr> `;  
+   // Agrega el elemento al contenedor
+   document.getElementById('publicacioneSPRO').appendChild(planillaDiv);  
+   index++; 
+        });   
+        
+        
+      // Agrega una clase CSS para ocultar elementos
+ var style = document.createElement('style');
+  style.innerHTML = `
+   .hide {
+     display: none;
+    }
+    `;
+   document.head.appendChild(style);
+
+   //for (var i = 0; i < querySnapshot.size; i++) {
+
+    //var docId = querySnapshot.docs[i].id;
+  //var planillas = document.querySelector('#' + docId + 'planillas-' + i);
+
+
+  for (var i = 0; i < querySnapshot.size; i++) {
+  var docId = querySnapshot.docs[i].id;
+  var uniqueId = 'planillas-' + i; // Generar el ID único con un prefijo y un número incremental
+
+  var planillas = document.querySelector('#' + docId + uniqueId);
+ 
+   var links = planillas.querySelectorAll('a');
+
+   // Verifica si cada enlace tiene datos en los atributos 'data-...''
+   links.forEach(link => {
+
+   var localizacioN = link.getAttribute('data-localizacion');   
+   var weB = link.getAttribute('data-web');
+   var tiendA = link.getAttribute('data-tienda');
+   var emaiL = link.getAttribute('data-email');
+   var instagraM = link.getAttribute('data-instagram');
+   var facebooK = link.getAttribute('data-facebook');
+   var telefonO = link.getAttribute('data-telefono');
+   var whatsapP = link.getAttribute('data-whatsapp');
+
+   if (localizacioN) {
+   // Si el atributo 'data-localizacion' tiene datos, se muestra el enlace y se remueve la clase "hide"
+   link.classList.remove('hide');
+ } else {
+   // Si el atributo 'data-localizacion' no tiene datos, se oculta el enlace agregando la clase "hide"
+   link.classList.add('hide');
+ }
+
+ if (weB) {
+   // Si el atributo 'data-web' tiene datos, se muestra el enlace y se remueve la clase "hide"
+   link.classList.remove('hide');
+ } else {
+   // Si el atributo 'data-web' no tiene datos, se oculta el enlace agregando la clase "hide"
+   link.classList.add('hide');
+ }
+
+ if (tiendA) {
+   // Si el atributo 'data-web' tiene datos, se muestra el enlace y se remueve la clase "hide"
+   link.classList.remove('hide');
+ } else {
+   // Si el atributo 'data-web' no tiene datos, se oculta el enlace agregando la clase "hide"
+   link.classList.add('hide');
+ }
+
+ if (emaiL) {
+   // Si el atributo 'data-web' tiene datos, se muestra el enlace y se remueve la clase "hide"
+   link.classList.remove('hide');
+ } else {
+   // Si el atributo 'data-web' no tiene datos, se oculta el enlace agregando la clase "hide"
+   link.classList.add('hide');
+ }
+
+ if (instagraM) {
+   // Si el atributo 'data-web' tiene datos, se muestra el enlace y se remueve la clase "hide"
+   link.classList.remove('hide');
+ } else {
+   // Si el atributo 'data-web' no tiene datos, se oculta el enlace agregando la clase "hide"
+   link.classList.add('hide');
+ }
+
+ if (instagraM) {
+   // Si el atributo 'data-web' tiene datos, se muestra el enlace y se remueve la clase "hide"
+   link.classList.remove('hide');
+ } else {
+   // Si el atributo 'data-web' no tiene datos, se oculta el enlace agregando la clase "hide"
+   link.classList.add('hide');
+ }
+
+ if (telefonO) {
+   // Si el atributo 'data-web' tiene datos, se muestra el enlace y se remueve la clase "hide"
+   link.classList.remove('hide');
+ } else {
+   // Si el atributo 'data-web' no tiene datos, se oculta el enlace agregando la clase "hide"
+   link.classList.add('hide');
+ }
+
+ if (whatsapP) {
+   // Si el atributo 'data-web' tiene datos, se muestra el enlace y se remueve la clase "hide"
+   link.classList.remove('hide');
+ } else {
+   // Si el atributo 'data-web' no tiene datos, se oculta el enlace agregando la clase "hide"
+   link.classList.add('hide');
+ }
+
+   
+   });
+
+  } 
+
+
+
+    })   
+    .catch(function(error) {
+      console.error("Error al obtener las publicaciones: ", error);
+      alert("Ha ocurrido un error al obtener las publicaciones.");
+    });   
+  
+
+
+
+
+
+
+     // Obtiene una referencia a la colección "planillas" en Firestore
+     var planillasRefFREE = firebase.firestore().collection('publicFREE');
+
+     // Realizar consulta y ordenar documentos por fecha de creación en orden descendente
+     planillasRefFREE.orderBy('Fecha', 'desc').get().then(querySnapshot => {
+     querySnapshot.forEach(doc => { 
+   
+     // Declaración de la variable imagenMostrada
+     //var imagenMostradaID = doc.id + "-imagen"; // Puedes asignar un ID único a cada imagen
+
+
+   
+    // Crea un elemento para mostrar los datos de cada planilla
+    var PlanillaDiv = document.createElement('div');
+    PlanillaDiv.innerHTML = `
+    <div class="PublicPro">
+
+<div class="encabesadoFREE">
+   <div class="">
+              
+   <p class="nombreFREE" style="color:crimson"> ${doc.data().NombrePublic}</p>
+   </div>
+</div>  
+
+ <p style="font-size: 13px;"><strong style="color:crimson"></strong> ${doc.data().Descripción}</p>
+
+ <img style="width:100%;" id="" src="${doc.data().ImagenURL}" alt="Imagen">  
+
+</div>
+
+<div class="enlacesFREE">
+<div Class="bt_devajoFREE">
+   
+    <a href="sms:${doc.data().Telefono}?body=Hola,%20me%20estoy%20comunicando%20con%20vos%20desde%20InfoArias"> 
+          <img Class="bt_1 btn_precionar2"
+             src="https://cdn.glitch.global/d2790308-1a85-4496-93a7-f609261ec0d4/Mensajeria.png?v=1688202602086"></a>
+
+    <a href="https://m.me/${doc.data().Imid}?text=Hola,%20me%20estoy%20comunicando%20con%20vos%20desde%20InfoArias">
+          <img Class="bt_1 btn_precionar2"
+             src="https://cdn.glitch.global/d2790308-1a85-4496-93a7-f609261ec0d4/Messenger.png?v=1688202601210"></a>
+
+</div>
+</div>
+
+
+ <hr >
+
+`;
+    // Agrega el elemento al contenedor
+    document.getElementById('publicacioneSFREE').appendChild(PlanillaDiv);     
+    
+   
+
+  });
+})
+
+.catch(function(error) {
+  console.error("Error al obtener las publicaciones: ", error);
+  alert("Ha ocurrido un error al obtener las publicaciones.");
+});
+
+
+
+  </script>
+
+<script>
+  
+  </script>
+           
+     
+    <script type="module">
+
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
+            // TODO: Add SDKs for Firebase products that you want to use
+            // https://firebase.google.com/docs/web/setup#available-libraries
+          
+            // Your web app's Firebase configuration
+            // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+            const firebaseConfig = {
+              apiKey: "AIzaSyBlXEy8jj8s09bp1JsxprzdpRaWT-hPs60",
+              authDomain: "infoariasweb.firebaseapp.com",
+              projectId: "infoariasweb",
+              storageBucket: "infoariasweb.appspot.com",
+              messagingSenderId: "621642706500",
+              appId: "1:621642706500:web:eb71f8f1be6cb05a68d611",
+              measurementId: "G-NMZ2M50KEW"
+            };
+          
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
+
+            //function share() {
+            //Android.shareLink("InfoArias Muestrario", "Esta es la nueva pagina de muestras de publicaciones de InfoArias " + "https://cdn.glitch.global/d2790308-1a85-4496-93a7-f609261ec0d4/whatsapp.png?v=1666714961585" );      
+            //}
+
+    </script> 
+           
+        
+           
+  </body>
+</html>
